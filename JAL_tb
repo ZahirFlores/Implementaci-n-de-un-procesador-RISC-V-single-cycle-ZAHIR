@@ -1,0 +1,36 @@
+module JAL_tb;
+
+    // Señales de estímulo 
+    reg clk;
+    reg rst;
+
+    // Instancia del procesador 
+    
+    JAL DUT (
+        .clk(clk),
+        .rst(rst)
+    );
+
+    // Generador de Reloj
+    always begin
+        #5 clk = ~clk;
+    end
+
+    // Bloque de inicialización y estímulos
+    initial begin
+        // Valores iniciales
+        clk = 0;
+        rst = 1; // Mantiene el sistema en reset al empezar
+
+        // Espera un ciclo completo de reloj y libera el reset
+        #10;
+        rst = 0; // El PC comenzará a avanzar desde la dirección 0
+
+       
+        #100;
+
+        
+        $stop; 
+    end
+
+endmodule
