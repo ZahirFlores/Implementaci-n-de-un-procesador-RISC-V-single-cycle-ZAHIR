@@ -15,13 +15,13 @@ El siguiente diagrama representa la ruta de datos completa implementada en el ha
 
 ```mermaid
 graph LR
-    %% Definición de Estilos
-    classDef fetch fill:#e1f5fe,stroke:#0288d1,stroke-width:2px;
-    classDef decode fill:#efebe9,stroke:#5d4037,stroke-width:2px;
-    classDef execute fill:#e8f5e9,stroke:#388e3c,stroke-width:2px;
-    classDef memory fill:#fff3e0,stroke:#f57c00,stroke-width:2px;
-    classDef wb fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px;
-    classDef control fill:#ffebee,stroke:#c62828,stroke-width:2px;
+    %% Definición de Estilos (Con texto en negro)
+    classDef fetch fill:#e1f5fe,stroke:#0288d1,stroke-width:2px,color:#000000;
+    classDef decode fill:#efebe9,stroke:#5d4037,stroke-width:2px,color:#000000;
+    classDef execute fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000000;
+    classDef memory fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000000;
+    classDef wb fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000000;
+    classDef control fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#000000;
 
     %% Bloques Principales por Etapa
     subgraph Etapa_Fetch [Fetch - Búsqueda]
