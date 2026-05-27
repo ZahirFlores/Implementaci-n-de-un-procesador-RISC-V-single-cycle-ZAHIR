@@ -1,0 +1,7 @@
+module branch_comparator(
+    input  [31:0] RD1,  // Contenido de Registro 1
+    input  [31:0] RD2,  // Contenido de Registro 2
+    output        Zero  // Pone un 1 lógico si son exactamente iguales
+);
+    assign Zero = (RD1 == RD2) ? 1'b1 : 1'b0;
+endmodule
