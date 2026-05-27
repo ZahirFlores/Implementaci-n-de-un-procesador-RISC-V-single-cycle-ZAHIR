@@ -1,0 +1,13 @@
+module program_counter(
+    input             clk,      // Señal de reloj
+    input             rst,      // Señal de reinicio (Reset)
+    input      [31:0] pc_in,    // Dirección calculada para el siguiente ciclo
+    output reg [31:0] pc_out    // Dirección de la instrucción actual
+);
+    always @(posedge clk or posedge rst) begin
+        if (rst) 
+            pc_out <= 32'b0;    // Si hay reset, el PC vuelve a la dirección 0
+        else     
+            pc_out <= pc_in;    // Si no, carga la nueva dirección
+    end
+endmodule
