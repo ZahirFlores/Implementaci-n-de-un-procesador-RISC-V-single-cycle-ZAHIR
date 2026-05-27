@@ -1,0 +1,91 @@
+module JAL(
+    input clk,
+    input rst
+);
+    // Interconexiones internas
+    wire [31:0] pc_in, pc_out, pc_plus4, pc_target;
+    wire [31:0] instr;
+    wire        RegWrite, ALUSrc, MemWrite, Branch, Jump;
+    wire [1:0]  ImmSrc, ResultSrc, ALUOp;
+    wire [2:0]  ALUControl_sig;
+    wire [31:0] RD1, RD2, ImmExt, SrcB, ALUResult, ReadData, Result;
+    wire        Zero, PCSrc;
+
+    // Lógica para decidir si el PC avanza a la sig. instrucción o salta
+    assign PCSrc = (Branch & Zero) | Jump;
+
+    //Program Counter
+    program_counter pc_block (
+        .clk(clk), .rst(rst), .pc_in(pc_in), .pc_out(pc_out)
+    );
+
+    //Sumador PC + 4
+    adder pc_add4_block (
+        .a(pc_out), .b(32'd4), .y(pc_plus4)
+    );
+
+    //Sumador de Saltos (PC + Inmediato)
+    adder pc_target_block (
+        .a(pc_out), .b(ImmExt), .y(pc_target)
+    );
+
+    //Multiplexor del PC
+    mux2 pc_mux_block (
+        .d0(pc_plus4), .d1(pc_target), .s(PCSrc), .y(pc_in)
+    );
+
+    //Memoria de Instrucciones
+    instruction_memory imem_block (
+        .clk(clk), .A(pc_out), .RD(instr)
+    );
+
+    //Unidad de Control
+    control_unit cu_block (
+        .op(instr[6:0]), .RegWrite(RegWrite), .ImmSrc(ImmSrc), 
+        .ALUSrc(ALUSrc), .MemWrite(MemWrite), .ResultSrc(ResultSrc), 
+        .Branch(Branch), .ALUOp(ALUOp), .Jump(Jump)
+    );
+
+    //Banco de Registros
+    register_file rf_block (
+        .clk(clk), .RegWrite(RegWrite), 
+        .A1(instr[19:15]), .A2(instr[24:20]), .A3(instr[11:7]), 
+        .WD3(Result), .RD1(RD1), .RD2(RD2)
+    );
+
+    //Generador de Inmediatos
+    immediate_generator imm_block (
+        .instr(instr[31:7]), .ImmSrc(ImmSrc), .ImmExt(ImmExt)
+    );
+
+    //Comparador de Saltos
+    branch_comparator bc_block (
+        .RD1(RD1), .RD2(RD2), .Zero(Zero)
+    );
+
+    //Multiplexor para la entrada B de la ALU
+    mux2 alu_src_mux (
+        .d0(RD2), .d1(ImmExt), .s(ALUSrc), .y(SrcB)
+    );
+
+    //Controlador de la ALU
+    alu_control alu_ctrl_block (
+        .ALUOp(ALUOp), .funct3(instr[14:12]), .funct7_bit(instr[30]), .ALUControl(ALUControl_sig)
+    );
+
+    //ALU
+    alu alu_block (
+        .SrcA(RD1), .SrcB(SrcB), .ALUControl(ALUControl_sig), .ALUResult(ALUResult)
+    );
+
+    //Memoria de Datos RAM
+    data_memory dmem_block (
+        .clk(clk), .MemWrite(MemWrite), .A(ALUResult), .WD(RD2), .RD(ReadData)
+    );
+
+    // Instancia: Multiplexor del resultado final hacia el registro destino
+    mux3 result_mux_block (
+        .d0(ALUResult), .d1(ReadData), .d2(pc_plus4), .s(ResultSrc), .y(Result)
+    );
+
+endmodule
