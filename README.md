@@ -1,8 +1,13 @@
-# Procesador RISC-V Monociclo (Soporte JAL)
+# Implementación de un procesador RISC-V single cycle
 
-Este repositorio contiene la implementación en Verilog de un procesador **RISC-V de ciclo único (Monociclo)**. El diseño ha sido sintetizado y verificado mediante simulaciones de tiempo, ofreciendo soporte para instrucciones de tipo R, tipo I (aritméticas con inmediatos) y la instrucción de salto incondicional **JAL (Jump and Link)**, guardando correctamente la dirección de retorno en el banco de registros.
 
 ---
+
+## 💻 Simulación de Ondas (QuestaSim)
+
+Comprobación del funcionamiento del hardware ejecutando saltos dinámicos y operaciones en la ALU:
+
+![Simulación de Ondas](Simu1.png)
 
 ## 🗺️ Datapath de la Arquitectura
 
