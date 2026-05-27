@@ -1,0 +1,15 @@
+module immediate_generator(
+    input      [31:7] instr,   // Bits del 7 al 31 de la instrucción
+    input      [1:0]  ImmSrc,  // Señal de selección que viene de la Control Unit
+    output reg [31:0] ImmExt   // Inmediato final de 32 bits extendido
+);
+    always @(*) begin
+        case (ImmSrc)
+            2'b00:   ImmExt = {{20{instr[31]}}, instr[31:20]}; // Tipo I
+            2'b01:   ImmExt = {{20{instr[31]}}, instr[31:25], instr[11:7]}; // Tipo S
+            2'b10:   ImmExt = {{19{instr[31]}}, instr[31], instr[7], instr[30:25], instr[11:8], 1'b0}; // Tipo B
+            2'b11:   ImmExt = {{12{instr[31]}}, instr[19:12], instr[20], instr[30:21], 1'b0}; // Tipo J
+            default: ImmExt = 32'b0;
+        endcase
+    end
+endmodule
