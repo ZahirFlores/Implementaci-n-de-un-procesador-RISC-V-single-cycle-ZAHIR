@@ -1,0 +1,20 @@
+module mux2(
+    input  [31:0] d0,
+    input  [31:0] d1,
+    input         s,
+    output [31:0] y
+);
+    assign y = s ? d1 : d0;
+endmodule
+
+// Multiplexor de 3 entradas de 32 bits
+module mux3(
+    input  [31:0] d0,
+    input  [31:0] d1,
+    input  [31:0] d2,
+    input  [1:0]  s,
+    output [31:0] y
+);
+    assign y = (s == 2'b00) ? d0 :
+               (s == 2'b01) ? d1 : d2;
+endmodule
