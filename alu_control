@@ -1,0 +1,29 @@
+module alu_control(
+    input      [1:0] ALUOp,       // Código que viene de la Control Unit
+    input      [2:0] funct3,      // Bits [14:12] de la instrucción
+    input            funct7_bit,  // Bit [30] de la instrucción
+    output reg [2:0] ALUControl   // Operación exacta que hará la ALU
+);
+    always @(*) begin
+        case (ALUOp)
+            2'b00: ALUControl = 3'b000; // Suma obligatoria (para lw, sw, jal)
+            2'b01: ALUControl = 3'b001; // Resta obligatoria (para beq)
+            2'b10: begin // Instrucciones Tipo-R y Tipo-I lógicas/aritméticas
+                case (funct3)
+                    3'b000: begin
+                        // Si el bit 30 es 1 y es Tipo-R, es una resta (sub). Si no, es suma (add/addi).
+                        if (funct7_bit && (ALUOp == 2'b10)) 
+                            ALUControl = 3'b001; // Resta
+                        else
+                            ALUControl = 3'b000; // Suma
+                    end
+                    3'b010: ALUControl = 3'b101; // Menor que (slt)
+                    3'b110: ALUControl = 3'b011; // Operación OR
+                    3'b111: ALUControl = 3'b010; // Operación AND
+                    default: ALUControl = 3'b000;
+                endcase
+            end
+            default: ALUControl = 3'b000;
+        endcase
+    end
+endmodule
