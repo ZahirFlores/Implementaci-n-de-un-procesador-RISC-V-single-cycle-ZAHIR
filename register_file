@@ -1,0 +1,29 @@
+module register_file(
+    input         clk,
+    input         RegWrite, // Señal que permite guardar un dato
+    input  [4:0]  A1,       // Dirección del Registro Fuente 1 (rs1)
+    input  [4:0]  A2,       // Dirección del Registro Fuente 2 (rs2)
+    input  [4:0]  A3,       // Dirección del Registro Destino (rd)
+    input  [31:0] WD3,      // Dato de 32 bits que se va a escribir
+    output [31:0] RD1,      // Salida del contenido del Registro 1
+    output [31:0] RD2       // Salida del contenido del Registro 2
+);
+    reg [31:0] registers [0:31]; // Memoria interna de 32 palabras
+    integer i;
+
+    initial begin
+        // Inicializa todos los registros en 0
+        for(i=0; i<32; i=i+1) registers[i] = 32'b0;
+    end
+
+    always @(posedge clk) begin
+        // Escribe solo si RegWrite está activo y el destino no es el registro cero (x0)
+        if (RegWrite && (A3 != 5'b0)) begin
+            registers[A3] <= WD3;
+        end
+    end
+
+    // Lecturas asíncronas (combinacionales). Si se pide el registro x0, siempre devuelve 0.
+    assign RD1 = (A1 == 5'b0) ? 32'b0 : registers[A1];
+    assign RD2 = (A2 == 5'b0) ? 32'b0 : registers[A2];
+endmodule
