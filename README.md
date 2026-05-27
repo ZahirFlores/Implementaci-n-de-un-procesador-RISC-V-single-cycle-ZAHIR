@@ -7,7 +7,7 @@
 
 Comprobación del funcionamiento del hardware ejecutando saltos dinámicos y operaciones en la ALU:
 
-![Simulación de Ondas](Simu1.png)
+![Simulación de Ondas](Simu1.jpeg)
 
 ## 🗺️ Datapath de la Arquitectura
 
