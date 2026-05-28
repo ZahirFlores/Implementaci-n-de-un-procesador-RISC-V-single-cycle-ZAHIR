@@ -3,7 +3,7 @@
 
 ---
 
-## 💻 Simulación de Ondas (QuestaSim)
+## 💻 Simulación de Ondas
 
 Comprobación del funcionamiento del hardware ejecutando saltos dinámicos y operaciones en la ALU:
 
